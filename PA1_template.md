@@ -42,7 +42,10 @@ meanPerInterval<-aggregate(act_nm$steps,by = list(act_nm$interval),FUN=mean)
 ```
 
 ```r
-plot(meanPerInterval$x,type = "l",main="Average steps for each 5 minute interval",xlab ="5 minute intervals (288 of them)", ylab = "Average steps accross all the days" )
+plot(meanPerInterval$x,type = "l",
+     main="Average steps for each 5 minute interval",
+     xlab ="5 minute intervals (288 of them)",
+     ylab = "Average steps accross all the days" )
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
@@ -77,7 +80,10 @@ require(sqldf)
 
 ```r
 names(meanPerInterval)<-c("interval","steps")
-missAct<-sqldf("SELECT meanPerInterval.steps, missAct.date, missAct.interval FROM missAct INNER JOIN meanPerInterval ON meanPerInterval.interval=missAct.interval")
+missAct<-sqldf("SELECT meanPerInterval.steps,
+               missAct.date,
+               missAct.interval
+               FROM missAct INNER JOIN meanPerInterval ON    meanPerInterval.interval=missAct.interval")
 ```
 
 ```
@@ -95,7 +101,8 @@ totalPerDay2<-aggregate(fillAct$steps,by = list(fillAct$date),FUN=sum)
 ### Histogram for filled data###
 
 ```r
-hist(totalPerDay2$x, main="Histogram of total steps per day for filled data",xlab = "Steps per day",border = "blue")
+hist(totalPerDay2$x, main="Histogram of total steps per day for filled data",
+     xlab = "Steps per day",border = "blue")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
@@ -127,7 +134,9 @@ WD[wd==1 | wd ==7]=2
 WD<-factor(WD,labels=c("weekday","weekend"))
 fillAct<-cbind(fillAct,WD)
 
-meanPerIntWD<-aggregate(fillAct$steps,by=list(fillAct$interval,fillAct$WD),FUN = mean)
+meanPerIntWD<-aggregate(fillAct$steps,
+                        by=list(fillAct$interval,fillAct$WD),
+                        FUN = mean)
 names(meanPerIntWD)<-c("interval","WD","steps")
 ```
 ### We can see that during the weekdays the activity peaks on the early morning more than on the weekends. But as the subject starts working during any weekday the activity then is less than on the weekends. It seems he/she probably works (at least part of the time) seated. This person probably excercises in the morning, some cardio. ###
@@ -142,7 +151,10 @@ require(lattice)
 ```
 
 ```r
-xyplot(steps~interval | WD, data = meanPerIntWD, type = "l",main="Average steps per time interval per day type")
+xyplot(steps~interval | WD, 
+       data = meanPerIntWD,
+       type = "l",
+       main="Average steps per time interval per day type")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
